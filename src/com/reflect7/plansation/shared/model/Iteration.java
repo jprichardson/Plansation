@@ -39,7 +39,7 @@ public class Iteration implements Serializable {
 	public void setHasEnded(Boolean hasEnded) { this.hasEnded = hasEnded; }
 	
 	@Persistent
-	private List<Requirement> requirements = new ArrayList<Requirement>();
-	public List<Requirement> getRequirements() { return requirements; }
+	private List<Task> tasks = new ArrayList<Task>();
+	public List<Task> getTasks() { return tasks; }
 	
 }

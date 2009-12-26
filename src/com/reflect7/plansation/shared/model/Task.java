@@ -16,7 +16,7 @@ import com.google.appengine.api.datastore.Key;
 //@PersistenceCapable(identityType = IdentityType.APPLICATION, detachable = "true")
 @SuppressWarnings("serial")
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class Requirement implements Serializable {
+public class Task implements Serializable {
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Key key;
@@ -52,10 +52,10 @@ public class Requirement implements Serializable {
 	public Date getCompletedAt() { return this.completedAt; }
 	
 	@Persistent
-	private List<Requirement> subRequirements = new ArrayList<Requirement>();
-	public List<Requirement> getSubRequirements() { return subRequirements; }
+	private List<Task> subRequirements = new ArrayList<Task>();
+	public List<Task> getSubRequirements() { return subRequirements; }
 	
-	public Requirement(Boolean isProject){
+	public Task(Boolean isProject){
 		this.isProject = isProject;
 	}
 	

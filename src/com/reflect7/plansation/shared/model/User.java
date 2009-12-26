@@ -43,6 +43,6 @@ public class User implements Serializable {
 	}
 	
 	@Persistent
-	private List<Requirement> requirements = new ArrayList<Requirement>();
-	public List<Requirement> getRequirements() { return requirements; }
+	private List<Task> tasks = new ArrayList<Task>();
+	public List<Task> getTasks() { return tasks; }
 }
