@@ -1,24 +1,38 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
 	<ui:style>
 		.important {
 			font-weight: bold;
 		}
+		
+		.main-view {
+			background-color: #EEE;
+		}
+		
+		.main-view-panel {
+			background-color: white;
+			margin: 10px;
+			z-index: 2;	
+		}
 	</ui:style>
-	<g:DockLayoutPanel unit='EM'>
-		<g:north size='4'>
+
+	<g:DockLayoutPanel unit='EM' styleName="{style.main-view}">
+		<g:north size='4' styleName="{style.main-view-panel}">
 			<g:Label>Header</g:Label>
 		</g:north>
 		<g:center>
-			<g:SplitLayoutPanel>
-				<g:west size='128'>
+			<g:SplitLayoutPanel ui:field="splitterPanel" styleName="{style.main-view-panel}">
+				<g:west size='128' styleName="{style.main-view-panel}">
 					<g:Label>Navigation</g:Label>
 				</g:west>
 				
-				<g:center>
+				<g:center styleName="{style.main-view-panel}">
 					<g:ScrollPanel>
-						<g:Label>Content Area</g:Label>
+						<g:Label>
+							Content Area Content Area 
+						</g:Label>
 					</g:ScrollPanel>
 				</g:center>
 			</g:SplitLayoutPanel>

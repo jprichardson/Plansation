@@ -1,0 +1,13 @@
+@CHARSET "UTF-8";
+.gwt-SplitLayoutPanel{
+	background-color: #EEE;	
+}
+
+ .gwt-SplitLayoutPanel-HDragger{
+	cursor: col-resize;
+	background-color: #EEE;
+}
+
+.gwt-SplitLayoutPanel-VDragger{
+	cursor: row-resize;
+}
