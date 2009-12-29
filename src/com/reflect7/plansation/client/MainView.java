@@ -64,7 +64,7 @@ public class MainView extends Composite {
 	}
 	
 	@UiHandler("textTask")
-	void handleKeyPress(KeyPressEvent e){
+	void handleKeyPressf(KeyPressEvent e){
 		byte b = (byte)e.getCharCode();
 		if (b == 13){//[ENTER] key pressed
 			String task = textTask.getText().trim();
@@ -80,5 +80,18 @@ public class MainView extends Composite {
 		}
 	}
 	
-	
+	@UiHandler("treeTasks")
+	void handleKeyPress(KeyPressEvent e){
+		byte b = (byte)e.getCharCode();
+		if (b == 8){//[DELETE] key pressed
+			TreeItem selectedItem = treeTasks.getSelectedItem();
+			if (selectedItem != null){
+				TreeItem parentItem = selectedItem.getParentItem();
+				if (parentItem == null)
+					treeTasks.removeItem(selectedItem);
+				else
+					selectedItem.getParentItem().removeItem(selectedItem);
+			}
+		}
+	}
 }
