@@ -20,6 +20,11 @@
 			margin: 10px;
 			z-index: 2;	
 		}
+		
+		.task-list {
+			width: 100%;
+			height: 100%;	
+		}
 	</ui:style>
 
 	<g:DockLayoutPanel unit='EM' styleName="{style.main-view}">
@@ -40,11 +45,23 @@
 				</g:west>
 				
 				<g:center styleName="{style.main-view-panel}">
-					<g:ScrollPanel>
-						<g:Label>
-							Content Area Content Area 
-						</g:Label>
-					</g:ScrollPanel>
+					<g:DockLayoutPanel unit="PX">
+						<g:north size="30">
+							<g:HorizontalPanel>
+								<g:Button ui:field="buttonStartIteration">Start Iteration</g:Button>
+								<g:Button ui:field="buttonEndIteration">End Iteration</g:Button>
+								<g:Button ui:field="buttonAddTask">Add Task</g:Button>
+							</g:HorizontalPanel>
+						</g:north>
+						<g:center>
+							<g:ListBox ui:field="listTasks" styleName="{style.task-list}" visibleItemCount="10">
+								
+							</g:ListBox>
+							<!-- <g:ScrollPanel>
+								
+							</g:ScrollPanel> -->
+						</g:center>
+					</g:DockLayoutPanel>
 				</g:center>
 			</g:SplitLayoutPanel>
 		</g:center>

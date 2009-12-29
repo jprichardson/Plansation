@@ -15,6 +15,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Tree;
@@ -31,7 +32,7 @@ public class MainView extends Composite {
 	@UiField SplitLayoutPanel splitterPanel;
 	@UiField Tree treeTasks;
 	@UiField TextBox textTask;
-	
+	@UiField ListBox listTasks;
 	
 	public MainView() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -56,6 +57,16 @@ public class MainView extends Composite {
 					}
 						
 			}	
+	}
+	
+	@UiHandler("buttonAddTask")
+	void handleClick(ClickEvent e){
+		TreeItem selectedItem = treeTasks.getSelectedItem();
+		if (selectedItem == null)
+			Window.alert("You must select a task before you can add it.");
+		else {
+			listTasks.addItem(selectedItem.getText());
+		}
 	}
 	
 	@UiHandler("textTask")
