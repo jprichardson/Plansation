@@ -11,6 +11,10 @@
 			background-color: #EEE;
 		}
 		
+		.test {
+			background-color: red;	
+		}
+		
 		.main-view-panel {
 			background-color: white;
 			margin: 10px;
@@ -24,8 +28,15 @@
 		</g:north>
 		<g:center>
 			<g:SplitLayoutPanel ui:field="splitterPanel" styleName="{style.main-view-panel}">
-				<g:west size='128' styleName="{style.main-view-panel}">
-					<g:Label>Navigation</g:Label>
+				<g:west size='160' styleName="{style.main-view-panel}">
+					<g:DockLayoutPanel unit='PX'>
+						<g:center>
+							<g:Tree ui:field="treeTasks"></g:Tree>
+						</g:center>
+						<g:south size='30'>
+							<g:TextBox ui:field="textTask">Enter Task</g:TextBox>
+						</g:south>
+					</g:DockLayoutPanel>
 				</g:west>
 				
 				<g:center styleName="{style.main-view-panel}">
