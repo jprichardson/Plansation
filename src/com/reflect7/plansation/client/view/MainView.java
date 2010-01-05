@@ -1,4 +1,4 @@
-package com.reflect7.plansation.client;
+package com.reflect7.plansation.client.view;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.Widget;
+import com.reflect7.plansation.shared.model.Task;
 
 public class MainView extends Composite {
 
@@ -30,9 +31,10 @@ public class MainView extends Composite {
 	interface MainViewUiBinder extends UiBinder<Widget, MainView> {}
 
 	@UiField SplitLayoutPanel splitterPanel;
-	@UiField Tree treeTasks;
-	@UiField TextBox textTask;
-	@UiField ListBox listTasks;
+	@UiField TreeTaskPanel treeTaskPanel;
+	@UiField ListTaskPanel listTaskPanel;
+
+	//@UiField ListBox listTasks;
 	
 	public MainView() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -61,48 +63,13 @@ public class MainView extends Composite {
 	
 	@UiHandler("buttonAddTask")
 	void handleClick(ClickEvent e){
-		TreeItem selectedItem = treeTasks.getSelectedItem();
-		if (selectedItem == null)
+		Task selectedTask = treeTaskPanel.getSelectedTask();
+		if (selectedTask == null)
 			Window.alert("You must select a task before you can add it.");
 		else {
-			listTasks.addItem(selectedItem.getText());
+			listTaskPanel.addTask(treeTaskPanel.getSelectedTask());
 		}
 	}
 	
-	@UiHandler("textTask")
-	void handleChange(ChangeEvent e){
-		
-	}
 	
-	@UiHandler("textTask")
-	void handleKeyPressf(KeyPressEvent e){
-		byte b = (byte)e.getCharCode();
-		if (b == 13){//[ENTER] key pressed
-			String task = textTask.getText().trim();
-			TreeItem newItem = new TreeItem(task);
-			
-			TreeItem selectedItem = treeTasks.getSelectedItem();
-			if (selectedItem != null)
-				selectedItem.addItem(newItem);
-			else
-				treeTasks.addItem(newItem);
-			
-			textTask.setText("");
-		}
-	}
-	
-	@UiHandler("treeTasks")
-	void handleKeyPress(KeyPressEvent e){
-		byte b = (byte)e.getCharCode();
-		if (b == 8){//[DELETE] key pressed
-			TreeItem selectedItem = treeTasks.getSelectedItem();
-			if (selectedItem != null){
-				TreeItem parentItem = selectedItem.getParentItem();
-				if (parentItem == null)
-					treeTasks.removeItem(selectedItem);
-				else
-					selectedItem.getParentItem().removeItem(selectedItem);
-			}
-		}
-	}
 }

@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.reflect7.plansation.client.view.MainView;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
