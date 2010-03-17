@@ -44,7 +44,7 @@ public class MainView extends Composite {
 	public void onAttach(){
 		super.onAttach();
 		
-		//hack until GWT Team fixes Issue 4384/4417
+		/*//hack until GWT Team fixes Issue 4384/4417
 		Element splitterElement = splitterPanel.getElement();
 		NodeList<Node> nodes = splitterElement.getChildNodes();
 		//Window.alert(nodes.getLength() + "");
@@ -58,7 +58,7 @@ public class MainView extends Composite {
 						e.getFirstChildElement().getStyle().clearBackgroundColor();
 					}
 						
-			}	
+			}*/	
 	}
 	
 	@UiHandler("buttonAddTask")
