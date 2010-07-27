@@ -16,6 +16,17 @@
     <url-pattern>/plansation/greet</url-pattern>
   </servlet-mapping>
   
+  <!-- Task -->
+  <servlet>
+    <servlet-name>taskServlet</servlet-name>
+    <servlet-class>com.reflect7.plansation.server.remoteservice.TaskServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>taskServlet</servlet-name>
+    <url-pattern>/plansation/task</url-pattern>
+  </servlet-mapping>
+  
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>Plansation.html</welcome-file>

@@ -3,6 +3,8 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 
 	<g:ScrollPanel ui:field="scrollPanel">
+		<g:VerticalPanel ui:field="verticalPanel">
 		
+		</g:VerticalPanel>
 	</g:ScrollPanel>
 </ui:UiBinder> 

@@ -4,36 +4,26 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
+import javax.persistence.Embedded;
+import javax.persistence.Id;
 
-//@PersistenceCapable(identityType = IdentityType.APPLICATION, detachable = "true")
+import com.googlecode.objectify.Key;
+
 @SuppressWarnings("serial")
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class User implements Serializable {
 	
 	private enum NameStyle {FirstLast, LastFirst};
+
+	public User() {};
 	
-	@PrimaryKey
-	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	private String email;
-	public String getEmail() { return this.email; }
-	public void setEmail(String email){ this.email = email; }
-	
-	@Persistent
-	private String firstName;
-	public String getFirstName(){ return firstName; }
-	public void setFirstName(String firstName) { this.firstName = firstName; }
-	
-	@Persistent
-	private String lastName;
-	public String getLastName(){ return lastName; }
-	public void setLastName(String lastName) { this.lastName = lastName; }
+	@Id Long id;
+	String email;
+	String firstName;
+	String lastName;
+	@Embedded List<Key<Task>> tasks = new ArrayList<Key<Task>>();
 	
 	public String getWholeName(NameStyle ns) {
+		
 		if (ns == NameStyle.FirstLast)
 			return firstName + " " + lastName;
 		else if (ns == NameStyle.LastFirst)
@@ -41,8 +31,4 @@ public class User implements Serializable {
 		
 		return "";
 	}
-	
-	@Persistent
-	private List<Task> tasks = new ArrayList<Task>();
-	public List<Task> getTasks() { return tasks; }
 }

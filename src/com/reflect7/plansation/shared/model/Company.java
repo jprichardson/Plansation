@@ -12,11 +12,11 @@ import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.datastore.Key;
 
-//@PersistenceCapable(identityType = IdentityType.APPLICATION, detachable = "true")
 @SuppressWarnings("serial")
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class Company implements Serializable {
-
+/*
+	
+	
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Key key;
@@ -30,5 +30,5 @@ public class Company implements Serializable {
 	
 	@Persistent
 	private List<User> users = new ArrayList<User>();
-	public List<User> getUser() { return users; }
+	//public List<User> getUser() { return users; }*/
 }
