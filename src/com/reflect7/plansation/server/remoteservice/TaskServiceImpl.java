@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.google.appengine.api.datastore.QueryResultIterable;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Query;
@@ -23,7 +24,20 @@ public class TaskServiceImpl extends RemoteServiceServlet implements TaskService
 		Objectify ofy = initObjectify();
 		//QueryResultIterable<Task> results = ofy.query(Task.class).fetch();
 		
-		Query<Task> result = ofy.query(Task.class).filter("parent", "");
+		Query<Task> result = ofy.query(Task.class).filter("parent", null);
+		
+		List<Task> tasks = new ArrayList<Task>();
+		for (Task t : result)
+			tasks.add(t);
+		
+		return tasks;
+	}
+	
+	public Iterable<Task> loadChildTasks(Task parent) throws IllegalArgumentException {
+		Objectify ofy = initObjectify();
+		
+		Query<Task> result = ofy.query(Task.class).filter("parent", parent);
+		
 		
 		List<Task> tasks = new ArrayList<Task>();
 		for (Task t : result)
@@ -35,6 +49,15 @@ public class TaskServiceImpl extends RemoteServiceServlet implements TaskService
 	public String saveTask(Task task) throws IllegalArgumentException {
 		Objectify ofy = initObjectify();
 		ofy.put(task);
+		
+		return null;
+	}
+	
+	public String saveTask(Task parent, Task child) throws IllegalArgumentException {
+		Objectify ofy = initObjectify();
+		child.parent = new Key<Task>(Task.class, parent.id);
+		
+		ofy.put(child);
 		
 		return null;
 	}

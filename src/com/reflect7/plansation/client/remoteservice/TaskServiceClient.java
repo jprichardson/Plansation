@@ -33,15 +33,35 @@ public class TaskServiceClient {
 		});
 	}
 	
+	public void loadChildTasks(Task parent, final Action<Iterable<Task>> action){
+		_service.loadChildTasks(parent, new AsyncCallback<Iterable<Task>>(){
+			public void onFailure(Throwable caught) {
+				Window.alert("Load Child Tasks - Failure");
+			}
+
+			public void onSuccess(Iterable<Task> result) {
+				action.execute(result);
+			}
+		});
+	}
+	
 	public void saveTask(Task task){
 		_service.saveTask(task, new AsyncCallback<String>(){
 			public void onFailure(Throwable caught) {
 				Window.alert("Save Task - Failure");
 			}
 
-			public void onSuccess(String result) {
-				
+			public void onSuccess(String result) {}
+		});
+	}
+	
+	public void saveTask(Task parent, Task child){
+		_service.saveTask(parent, child, new AsyncCallback<String>(){
+			public void onFailure(Throwable caught) {
+				Window.alert("Save Task Parent/Child - Failure");
 			}
+
+			public void onSuccess(String result) {}
 		});
 	}
 	

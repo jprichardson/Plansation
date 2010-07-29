@@ -7,6 +7,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.logical.shared.OpenEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -28,11 +29,8 @@ import com.reflect7.plansation.shared.model.Task;
 
 public class TreeTaskPanel extends Composite {
 
-	private static TreeTaskPanelUiBinder uiBinder = GWT
-			.create(TreeTaskPanelUiBinder.class);
-
-	interface TreeTaskPanelUiBinder extends UiBinder<Widget, TreeTaskPanel> {
-	}
+	private static TreeTaskPanelUiBinder uiBinder = GWT.create(TreeTaskPanelUiBinder.class);
+	interface TreeTaskPanelUiBinder extends UiBinder<Widget, TreeTaskPanel> {}
 
 	@UiField Tree treeTasks;
 	@UiField TextBox textTask;
@@ -48,7 +46,7 @@ public class TreeTaskPanel extends Composite {
 		taskServiceClient.loadTasks(new Action<Iterable<Task>>(){
 			public void execute(Iterable<Task> result){
 				for (Task t : result)
-					addTask(t.name);
+					addTask(t);
 			}
 		});
 	}
@@ -68,10 +66,14 @@ public class TreeTaskPanel extends Composite {
 		byte b = (byte)e.getCharCode();
 		if (b == 13){//[ENTER] key pressed
 			String task = textTask.getText().trim();
-			addTask(task);
+			Task child = new Task(task);
+			Task parent = addTask(child);
 			textTask.setText("");
 			
-			taskServiceClient.saveTask(new Task(task));
+			if (parent == null)
+				taskServiceClient.saveTask(child);
+			else
+				taskServiceClient.saveTask(parent, child);
 		}
 	}
 	
@@ -89,6 +91,19 @@ public class TreeTaskPanel extends Composite {
 			}
 		}
 	}
+	
+	@UiHandler("treeTasks")
+	void handleOpen(OpenEvent<TreeItem> e){
+		TreeItem pi = e.getTarget();
+		Task parent = _tasks.get(pi);
+		
+		taskServiceClient.loadChildTasks(parent, new Action<Iterable<Task>>(){
+			public void execute(Iterable<Task> result){
+				for (Task t : result)
+					addTask(t);
+			}
+		});
+	}
 
 /******************************************************
  * PUBLIC METHODS
@@ -105,17 +120,20 @@ public class TreeTaskPanel extends Composite {
 /******************************************************
  * PRIVATE METHODS
  ******************************************************/
-	private void addTask(String taskName){
-		TreeItem newItem = new TreeItem(taskName);
+	private Task addTask(Task task){
+		TreeItem newItem = new TreeItem(task.getDateTimeCreatedAt());
 		
 		TreeItem selectedItem = treeTasks.getSelectedItem();
 		
-		if (selectedItem != null)
+		Task parent = null;
+		if (selectedItem != null){
 			selectedItem.addItem(newItem);
-		else
+			parent = _tasks.get(selectedItem);
+		}else
 			treeTasks.addItem(newItem);
 		
-		Task task = new Task(taskName);
 		_tasks.put(newItem, task);
+		
+		return parent;
 	}
 }

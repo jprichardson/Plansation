@@ -5,5 +5,6 @@
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER/GWT (4)"/>
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER/App Engine (6)"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Objectify-2.2.1"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CommonGwt"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
