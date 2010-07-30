@@ -2,27 +2,31 @@ package com.reflect7.plansation.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.reflect7.commongwt.client.util.DateTimeUtil;
+import com.reflect7.plansation.client.data.TaskRepository;
+import com.reflect7.plansation.client.remoteservice.TaskService;
+import com.reflect7.plansation.client.remoteservice.TaskServiceAsync;
+import com.reflect7.plansation.client.remoteservice.TaskServiceClient;
 import com.reflect7.plansation.client.view.MainView;
 
 
 public class Plansation implements EntryPoint {
+	
+	private static TaskRepository _taskRepo;
+	private static TaskServiceAsync _taskService = GWT.create(TaskService.class);
+	private static TaskServiceClient _taskServiceClient;
+	
 	public void onModuleLoad() {
+		configure();
 		RootLayoutPanel.get().add(new MainView());
 	}
+	
+	private void configure(){
+		_taskServiceClient = new TaskServiceClient(_taskService);
+		_taskRepo = new TaskRepository(_taskServiceClient);
+	}
+	
+	//Not ideal, but until Google stablizes their MVP framework, I'm stuck with using Singletons
+	public static TaskRepository getTaskRepo() { return _taskRepo; }
+	public static TaskServiceClient getTaskServiceClient() { return _taskServiceClient; }
 }

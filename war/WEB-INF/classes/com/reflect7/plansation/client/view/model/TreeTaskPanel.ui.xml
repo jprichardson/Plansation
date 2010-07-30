@@ -1,7 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
-	xmlns:psw="urn:import:com.reflect7.plansation.client.widget"
+	xmlns:w="urn:import:com.reflect7.commongwt.client.ui.widget"
 >
 	<ui:style>
 		.panel{
@@ -14,7 +14,7 @@
 			<g:Tree ui:field="treeTasks"></g:Tree>
 		</g:center>
 		<g:south size="25">
-			<psw:TextBox ui:field="textTask" width="100%" placeholder="Enter task..."></psw:TextBox>
+			<w:TextBox ui:field="textTask" width="100%" placeholder="Enter task..."></w:TextBox>
 		</g:south>
 	</g:DockLayoutPanel>
 </ui:UiBinder> 

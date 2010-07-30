@@ -21,13 +21,12 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.Widget;
+import com.reflect7.plansation.client.view.model.TreeTaskPanel;
 import com.reflect7.plansation.shared.model.Task;
 
 public class MainView extends Composite {
 
-	private static MainViewUiBinder uiBinder = GWT
-			.create(MainViewUiBinder.class);
-
+	private static MainViewUiBinder uiBinder = GWT.create(MainViewUiBinder.class);
 	interface MainViewUiBinder extends UiBinder<Widget, MainView> {}
 
 	@UiField SplitLayoutPanel splitterPanel;

@@ -20,7 +20,7 @@ public class TaskServiceImpl extends RemoteServiceServlet implements TaskService
 	private static Boolean _objectifyInitialized = false;
 	private static Objectify _ofy = null;
 	
-	public Iterable<Task> loadRootTasks() throws IllegalArgumentException {
+	public List<Task> loadRootTasks() throws IllegalArgumentException {
 		Objectify ofy = initObjectify();
 		//QueryResultIterable<Task> results = ofy.query(Task.class).fetch();
 		
@@ -33,33 +33,35 @@ public class TaskServiceImpl extends RemoteServiceServlet implements TaskService
 		return tasks;
 	}
 	
-	public Iterable<Task> loadChildTasks(Task parent) throws IllegalArgumentException {
+	public List<Task> loadChildTasks(Task parent) throws IllegalArgumentException {
 		Objectify ofy = initObjectify();
 		
 		Query<Task> result = ofy.query(Task.class).filter("parent", parent);
 		
 		
 		List<Task> tasks = new ArrayList<Task>();
-		for (Task t : result)
+		for (Task t : result){
 			tasks.add(t);
+		}
 		
 		return tasks;
 	}
 	
-	public String saveTask(Task task) throws IllegalArgumentException {
+	public Key<Task> saveTask(Task task) throws IllegalArgumentException {
 		Objectify ofy = initObjectify();
-		ofy.put(task);
+		Key<Task> key = ofy.put(task);
 		
-		return null;
+		return key;
 	}
 	
-	public String saveTask(Task parent, Task child) throws IllegalArgumentException {
+	public Key<Task> saveTask(Task parent, Task child) throws IllegalArgumentException {
 		Objectify ofy = initObjectify();
-		child.parent = new Key<Task>(Task.class, parent.id);
+		Key<Task> parentKey = ofy.put(parent);
+		child.parent = parentKey;
 		
-		ofy.put(child);
+		Key<Task> key = ofy.put(child);
 		
-		return null;
+		return key;
 	}
 
 	private static Objectify initObjectify(){
