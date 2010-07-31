@@ -59,13 +59,17 @@ public class TaskServiceClient {
 	}
 	
 	public void saveTask(Task parent, final Task child){
-		_service.saveTask(parent, child, new AsyncCallback<Key<Task>>(){
+		_service.saveTask(parent, child, new AsyncCallback<List<Key<Task>>>(){
 			public void onFailure(Throwable caught) {
 				Window.alert("Save Task Parent/Child - Failure");
 			}
 
-			public void onSuccess(Key<Task> key){
-				child.id = key.getId();
+			public void onSuccess(List<Key<Task>> keys){
+				Key<Task> parentKey = keys.get(0);
+				Key<Task> childKey = keys.get(1);
+				
+				child.id = childKey.getId();
+				child.parent = parentKey;
 			}
 		});
 	}

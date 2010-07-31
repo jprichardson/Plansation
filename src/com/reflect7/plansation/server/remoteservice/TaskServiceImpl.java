@@ -54,14 +54,18 @@ public class TaskServiceImpl extends RemoteServiceServlet implements TaskService
 		return key;
 	}
 	
-	public Key<Task> saveTask(Task parent, Task child) throws IllegalArgumentException {
+	public List<Key<Task>> saveTask(Task parent, Task child) throws IllegalArgumentException {
 		Objectify ofy = initObjectify();
 		Key<Task> parentKey = ofy.put(parent);
 		child.parent = parentKey;
 		
-		Key<Task> key = ofy.put(child);
+		Key<Task> childKey = ofy.put(child);
 		
-		return key;
+		List<Key<Task>> keys = new ArrayList<Key<Task>>();
+		keys.add(parentKey);
+		keys.add(childKey);
+		
+		return keys;
 	}
 
 	private static Objectify initObjectify(){

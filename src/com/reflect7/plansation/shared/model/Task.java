@@ -88,6 +88,11 @@ public class Task extends ModelBase implements Serializable {
 	@Unindexed
 	public String description;
 	
+	
+	public String toString(){
+		return this.name;
+	}
+	
 	@Override //SERVER ONLY
 	protected void beforePersist(){
 		if (this.createdAt == 0)

@@ -12,5 +12,5 @@ public interface TaskService extends RemoteService{
 	public List<Task> loadRootTasks() throws IllegalArgumentException;
 	public List<Task> loadChildTasks(Task parent) throws IllegalArgumentException;
 	public Key<Task> saveTask(Task task) throws IllegalArgumentException;
-	public Key<Task> saveTask(Task parent, Task child) throws IllegalArgumentException;
+	public List<Key<Task>> saveTask(Task parent, Task child) throws IllegalArgumentException;
 }
