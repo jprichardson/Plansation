@@ -4,17 +4,21 @@
 	xmlns:w="urn:import:com.reflect7.commongwt.client.ui.widget"
 >
 	<ui:style>
-		.panel{
-			padding: 3px;	
+		.item { 
+
+			margin: 5px;
+			width: 100%;
 		}
 	</ui:style>
 
-	<g:DockLayoutPanel unit='PX' styleName="{style.panel}">
+	<g:DockLayoutPanel unit='PX'>
 		<g:center>
 			<g:Tree ui:field="treeTasks"></g:Tree>
 		</g:center>
 		<g:south size="25">
-			<w:TextBox ui:field="textTask" width="100%" placeholder="Enter task..."></w:TextBox>
+			<w:TextBox width="100%"   ui:field="textTask"  placeholder="Enter task..."></w:TextBox>
 		</g:south>
 	</g:DockLayoutPanel>
+
+	
 </ui:UiBinder> 

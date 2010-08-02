@@ -74,13 +74,13 @@ public class Task extends ModelBase implements Serializable {
 	
 	public Key<Task> parent = null;
 	private @Transient transient Task _parent = null;
-		public Task getParent() { return _parent; }
+		public Task geParent() { return _parent; }
 		public void setParent(Task parent) { _parent = parent; }
 	
-	/*public Key<Task> root = null;
+	public Key<Task> root = null;
 	private @Transient Task _root = null;
 		public Task getRoot() { return _root; }
-		public void setRoot(Task root) { _root = root; }*/
+		public void setRoot(Task root) { _root = root; }
 	
 	/*@Unindexed
 	public @Embedded List<Key<Task>> subTasks = new ArrayList<Key<Task>>();*/

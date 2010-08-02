@@ -38,11 +38,9 @@ public class TaskServiceImpl extends RemoteServiceServlet implements TaskService
 		
 		Query<Task> result = ofy.query(Task.class).filter("parent", parent);
 		
-		
 		List<Task> tasks = new ArrayList<Task>();
-		for (Task t : result){
+		for (Task t : result)
 			tasks.add(t);
-		}
 		
 		return tasks;
 	}
@@ -59,9 +57,15 @@ public class TaskServiceImpl extends RemoteServiceServlet implements TaskService
 		Key<Task> parentKey = ofy.put(parent);
 		child.parent = parentKey;
 		
+		if (parent.root == null)
+			child.root = parentKey;
+		else
+			child.root = parent.root;
+		
 		Key<Task> childKey = ofy.put(child);
 		
 		List<Key<Task>> keys = new ArrayList<Key<Task>>();
+		keys.add(child.root);
 		keys.add(parentKey);
 		keys.add(childKey);
 		

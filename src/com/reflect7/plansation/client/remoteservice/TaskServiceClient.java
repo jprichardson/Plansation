@@ -46,7 +46,7 @@ public class TaskServiceClient {
 		});
 	}
 	
-	public void saveTask(final Task task){
+	public void saveTask(final Task task, final Action<Task> successAction){
 		_service.saveTask(task, new AsyncCallback<Key<Task>>(){
 			public void onFailure(Throwable caught) {
 				Window.alert("Save Task - Failure");
@@ -54,22 +54,34 @@ public class TaskServiceClient {
 
 			public void onSuccess(Key<Task> key) {
 				task.id = key.getId();
+				
+				if (successAction != null)
+					successAction.execute(task);
 			}
 		});
 	}
 	
 	public void saveTask(Task parent, final Task child){
+		this.saveTask(parent, child, null);
+	}
+	
+	public void saveTask(Task parent, final Task child, final Action<Task> successAction){
 		_service.saveTask(parent, child, new AsyncCallback<List<Key<Task>>>(){
 			public void onFailure(Throwable caught) {
 				Window.alert("Save Task Parent/Child - Failure");
 			}
 
 			public void onSuccess(List<Key<Task>> keys){
-				Key<Task> parentKey = keys.get(0);
-				Key<Task> childKey = keys.get(1);
+				Key<Task> rootKey = keys.get(0);
+				Key<Task> parentKey = keys.get(1);
+				Key<Task> childKey = keys.get(2);
 				
+				child.root = rootKey;
 				child.id = childKey.getId();
 				child.parent = parentKey;
+				
+				if (successAction != null)
+					successAction.execute(child);
 			}
 		});
 	}

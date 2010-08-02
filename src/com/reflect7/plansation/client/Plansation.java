@@ -8,6 +8,7 @@ import com.reflect7.plansation.client.remoteservice.TaskService;
 import com.reflect7.plansation.client.remoteservice.TaskServiceAsync;
 import com.reflect7.plansation.client.remoteservice.TaskServiceClient;
 import com.reflect7.plansation.client.view.MainView;
+import com.reflect7.plansation.client.view.model.TreeTaskPanel;
 
 
 public class Plansation implements EntryPoint {
@@ -19,6 +20,7 @@ public class Plansation implements EntryPoint {
 	public void onModuleLoad() {
 		configure();
 		RootLayoutPanel.get().add(new MainView());
+		//RootLayoutPanel.get().add(new TreeTaskPanel());
 	}
 	
 	private void configure(){

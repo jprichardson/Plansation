@@ -1,5 +1,6 @@
 package com.reflect7.plansation.client.data;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.googlecode.objectify.Key;
@@ -11,10 +12,31 @@ public class TaskRepository {
 	
 	private TaskServiceClient _tsc;
 	
+/***************************************************
+ * CONSTRUCTORS
+ ***************************************************/
+	
 	public TaskRepository(TaskServiceClient tsc){
 		_tsc = tsc;
 	}
 	
+/***************************************************
+ * PROPERTIES
+ ***************************************************/
+	
+	private HashMap<Long, Task> _tasks = new HashMap<Long, Task>();
+		public HashMap<Long, Task> getTasks(){
+			return new HashMap<Long, Task>(_tasks); //return shallow copy
+		}
+		
+	public int getCount(){ return _tasks.size(); }
+	
+	public int size() { return this.getCount(); }
+	
+/***************************************************
+ * PUBLIC METHODS
+ ***************************************************/
+		
 	public Task createTask(String name){
 		Task t = new Task();
 		t.name = name;
@@ -34,18 +56,26 @@ public class TaskRepository {
 		return t;
 	}
 	
-	public void loadRootTasks(Action<List<Task>> action){
-		_tsc.loadRootTasks(action);
+	public void loadRootTasks(final Action<List<Task>> action){
+		_tsc.loadRootTasks(new Action<List<Task>>(){
+			@Override public void execute(List<Task> tasks) {
+				for (Task t : tasks){
+					_tasks.put(t.id, t);
+				}
+				
+				action.execute(tasks);
+			}
+		});
 	}
 	
 	public void loadChildTasks(final Task parent, final Action<List<Task>> action){
 		_tsc.loadChildTasks(parent, new Action<List<Task>>(){
 			@Override public void execute(List<Task> tasks) {
-				for (Task t : tasks)
+				for (Task t : tasks){
+					_tasks.put(t.id, t);
 					t.setParent(parent);
-				
-				parent.getChildren().clear();
-				parent.getChildren().addAll(tasks);
+					t.setRoot(_tasks.get(t.root.getId()));
+				}
 				
 				action.execute(tasks);
 			}
@@ -60,11 +90,23 @@ public class TaskRepository {
 		
 	}
 	
+/***************************************************
+ * PRIVATE METHODS
+ ***************************************************/
+	
 	private void persist(Task task){
-		_tsc.saveTask(task);
+		_tsc.saveTask(task, new Action<Task>(){
+			@Override public void execute(Task task) {
+				_tasks.put(task.id, task);
+			}
+		});
 	}
 	
 	private void persist(Task parent, Task child){
-		_tsc.saveTask(parent, child);
+		_tsc.saveTask(parent, child, new Action<Task>(){
+			@Override public void execute(Task task) {
+				_tasks.put(task.id, task);
+			}
+		});
 	}
 }

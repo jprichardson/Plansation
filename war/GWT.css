@@ -3,7 +3,7 @@
 	background-color: #EEE;	
 }
 
-.gwt-SplitLayoutPanel .gwt-SplitLayoutPanel-HDragger{
+.gwt-SplitLayoutPanel-HDragger{
 	/*cursor: col-resize;*/
 	background-color: #EEE;
 	/*background: #EEEEEE url(images/splitPanelThumb.png) no-repeat scroll center center*/

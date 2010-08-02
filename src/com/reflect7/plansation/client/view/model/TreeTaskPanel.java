@@ -5,10 +5,10 @@ import java.util.HashSet;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.KeyPressEvent;
+
+import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.logical.shared.OpenEvent;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -30,7 +30,7 @@ import com.reflect7.plansation.client.remoteservice.TaskServiceAsync;
 import com.reflect7.plansation.client.remoteservice.TaskServiceClient;
 import com.reflect7.plansation.shared.model.Task;
 
-public class TreeTaskPanel extends Composite {
+public class TreeTaskPanel extends Composite implements MouseOutHandler {
 
 	private static TreeTaskPanelUiBinder uiBinder = GWT.create(TreeTaskPanelUiBinder.class);
 	interface TreeTaskPanelUiBinder extends UiBinder<Widget, TreeTaskPanel> {}
@@ -42,7 +42,7 @@ public class TreeTaskPanel extends Composite {
 	TaskServiceClient taskServiceClient;
 	TaskRepository _taskRepo;
 	
-	TreeItem _loadingItem = new TreeItem("Loading...");
+	private static String TREEITEM_LOADING = "Loading...";
 	
 	public TreeTaskPanel() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -56,6 +56,8 @@ public class TreeTaskPanel extends Composite {
 				addTasks(result);
 			}
 		});
+		
+		this.addDomHandler(this, MouseOutEvent.getType());
 	}
 
 	
@@ -63,6 +65,14 @@ public class TreeTaskPanel extends Composite {
 /******************************************************
  * UI METHODS
  ******************************************************/
+	/** 
+     * MouseDownHandler
+     */
+    public void onMouseOut(MouseOutEvent event) {
+		treeTasks.setSelectedItem(null);
+    }
+
+	
 	@UiHandler("textTask")
 	void handleChange(ChangeEvent e){
 		
@@ -96,23 +106,22 @@ public class TreeTaskPanel extends Composite {
 	@UiHandler("treeTasks")
 	void handleOpen(OpenEvent<TreeItem> e){
 		final TreeItem pi = e.getTarget();
-		//Task parent = _tasks.get(pi);
-		Task parent = (Task)pi.getUserObject();
+		Task parent = (Task)pi.getUserObject();	
 		
-		/*taskServiceClient.loadChildTasks(parent, new Action<Iterable<Task>>(){
-			public void execute(Iterable<Task> result){
-				for (Task t : result)
-					addTask(t);
-			}
-		});*/
-		
-		if (pi.getChild(0) == _loadingItem){
+		if (pi.getChild(0).getText().equals(TREEITEM_LOADING)){
 			_taskRepo.loadChildTasks(parent, new Action<List<Task>>(){
 				@Override public void execute(List<Task> tasks) {
 					addTasks(pi, tasks);
+					pi.removeItem(pi.getChild(0));
 				}
 			});
 		}
+	}
+	
+	@UiHandler("treeTasks")
+	void handleMouseOut(MouseOutEvent e){
+		/*if (treeTasks.getSelectedItem() != null)
+			treeTasks.setSelectedItem(null);*/
 	}
 
 /******************************************************
@@ -141,6 +150,9 @@ public class TreeTaskPanel extends Composite {
 	
 		TreeItem selectedItem = treeTasks.getSelectedItem();
 		this.addTask(selectedItem, child);
+		
+		if (selectedItem.getChildCount() == 1)
+			selectedItem.setState(true);
 	}
 	
 	private void addTask(TreeItem parentItem, Task task){
@@ -155,7 +167,7 @@ public class TreeTaskPanel extends Composite {
 		newItem.setUserObject(task);
 		
 		if (task.hasChildren)
-			newItem.addItem(_loadingItem);
+			newItem.addItem(new TreeItem(TREEITEM_LOADING));
 	}
 	
 	private void addTasks(List<Task> tasks){
@@ -164,12 +176,8 @@ public class TreeTaskPanel extends Composite {
 	}
 	
 	private void addTasks(TreeItem parentItem, List<Task> tasks){
-		if (parentItem.getChildIndex(_loadingItem) != -1)
-			parentItem.removeItem(_loadingItem);
-		
-		for (Task t : tasks){
+		for (Task t : tasks)
 			this.addTask(parentItem, t);
-		}
 	}
 	
 	private Task getTaskOfSelectedItem(){
