@@ -9,18 +9,47 @@ import javax.persistence.Embedded;
 import javax.persistence.Id;
 
 import com.googlecode.objectify.Key;
+import com.reflect7.commongwt.client.util.DateTimeUtil;
 
 
 @SuppressWarnings("serial")
-public class Iteration implements Serializable {
+public class Iteration extends ModelBase implements Serializable {
 	
 	public Iteration() {};
 	
-	@Id Long id;
-	Date startedAt;
-	Date endedAt;
-	Boolean hasEnded = false;
-
-	@Embedded List<Key<Task>> tasks = new ArrayList<Key<Task>>();
-	@Embedded List<Key<User>> users = new ArrayList<Key<User>>();
+	public @Id Long id;
+	
+	public long startedAt;
+		public Date getDateStartedAt(){
+			Date d = new Date();
+			d.setTime(this.startedAt);
+			return d;
+		}
+		
+		public String getDateTimeStartedAt(){ //CLIENT ONLY
+			return DateTimeUtil.getShortDateTime(this.getDateStartedAt());
+		}
+	
+	public long endedAt;
+		public Date getDateEndedAt(){
+			Date d = new Date();
+			d.setTime(this.endedAt);
+			return d;
+		}
+		
+		public String getDateTimeEndedAt(){ //CLIENT ONLY
+			return DateTimeUtil.getShortDateTime(this.getDateEndedAt());
+		}
+	
+	boolean hasStarted = false;
+	boolean hasEnded = false;
+	
+	@Override //SERVER ONLY
+	protected void beforePersist(){
+		if (this.startedAt == 0 && hasStarted)
+			this.startedAt = (new Date()).getTime();
+		
+		if (this.endedAt == 0 && hasEnded)
+			this.endedAt = (new Date()).getTime();
+	}
 }

@@ -1,6 +1,19 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:psv="urn:import:com.reflect7.plansation.client.view"
+>
 	
-	
+	<g:DockLayoutPanel unit="PX">
+		<g:north size="30">
+			<g:HorizontalPanel>
+				<g:Button ui:field="buttonStartIteration">Start Iteration</g:Button>
+				<g:Button ui:field="buttonEndIteration">End Iteration</g:Button>
+				<g:Button ui:field="buttonAddTask">Add Task</g:Button>
+			</g:HorizontalPanel>
+		</g:north>
+		<g:center>
+			<psv:ListTaskPanel ui:field="listTaskPanel"></psv:ListTaskPanel>
+		</g:center>
+	</g:DockLayoutPanel>
 </ui:UiBinder> 

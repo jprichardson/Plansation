@@ -82,6 +82,8 @@ public class Task extends ModelBase implements Serializable {
 		public Task getRoot() { return _root; }
 		public void setRoot(Task root) { _root = root; }
 	
+	public Key<Iteration> iteration = null;
+		
 	/*@Unindexed
 	public @Embedded List<Key<Task>> subTasks = new ArrayList<Key<Task>>();*/
 	

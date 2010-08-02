@@ -8,6 +8,9 @@ import com.google.gwt.core.client.GWT;
 
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.logical.shared.OpenEvent;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -18,6 +21,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 
+import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.Widget;
@@ -30,7 +34,7 @@ import com.reflect7.plansation.client.remoteservice.TaskServiceAsync;
 import com.reflect7.plansation.client.remoteservice.TaskServiceClient;
 import com.reflect7.plansation.shared.model.Task;
 
-public class TreeTaskPanel extends Composite implements MouseOutHandler {
+public class TreeTaskPanel extends Composite implements MouseOutHandler, RequiresResize {
 
 	private static TreeTaskPanelUiBinder uiBinder = GWT.create(TreeTaskPanelUiBinder.class);
 	interface TreeTaskPanelUiBinder extends UiBinder<Widget, TreeTaskPanel> {}
@@ -38,7 +42,7 @@ public class TreeTaskPanel extends Composite implements MouseOutHandler {
 	@UiField Tree treeTasks;
 	@UiField TextBox textTask;
 
-	//HashMap<TreeItem, Task> _tasks = new HashMap<TreeItem, Task>();
+	HashMap<Task, TreeItem> _tasks = new HashMap<Task, TreeItem>();
 	TaskServiceClient taskServiceClient;
 	TaskRepository _taskRepo;
 	
@@ -49,27 +53,31 @@ public class TreeTaskPanel extends Composite implements MouseOutHandler {
 		taskServiceClient = Plansation.getTaskServiceClient();
 		_taskRepo = Plansation.getTaskRepo();
 		
-		//_tasks.put(_loadingItem, null);
-		
 		_taskRepo.loadRootTasks(new Action<List<Task>>(){
 			public void execute(List<Task> result){
 				addTasks(result);
 			}
 		});
-		
-		this.addDomHandler(this, MouseOutEvent.getType());
 	}
-
 	
 	
 /******************************************************
  * UI METHODS
  ******************************************************/
-	/** 
-     * MouseDownHandler
-     */
+
+	@Override protected void onAttach(){
+		super.onAttach();
+		this.onResize();
+	}
+	
     public void onMouseOut(MouseOutEvent event) {
-		treeTasks.setSelectedItem(null);
+		//treeTasks.setSelectedItem(null);
+    }
+    
+    @Override public void onResize() {
+    	int width = this.getOffsetWidth() - 10;
+    	if (width > 0)
+    		textTask.setWidth(width + "px"); //HACK
     }
 
 	
@@ -116,17 +124,37 @@ public class TreeTaskPanel extends Composite implements MouseOutHandler {
 				}
 			});
 		}
+		
+	
+	}
+	
+	/*@UiHandler("treeTasks")
+	void handleMouseOut(MouseOutEvent e){
+		
 	}
 	
 	@UiHandler("treeTasks")
-	void handleMouseOut(MouseOutEvent e){
-		/*if (treeTasks.getSelectedItem() != null)
-			treeTasks.setSelectedItem(null);*/
+	void handleSelection(SelectionEvent<TreeItem> e){
+		System.out.println("selection");
 	}
+	
+	@UiHandler("treeTasks")
+	void handleMouseUp(MouseOutEvent e){
+		System.out.println("mouseup");
+	}
+	
+	@UiHandler("treeTasks")
+	void handleMouseDown(MouseDownEvent e){
+		System.out.println("mousedown");
+	}*/
 
 /******************************************************
  * PUBLIC METHODS
  ******************************************************/
+	//Called from IterationPanel
+	public boolean addTaskTreeItem(TreeItem item){
+		return false;
+	}
 	
 	public Task getSelectedTask(){
 		TreeItem selectedItem = treeTasks.getSelectedItem();
@@ -135,6 +163,10 @@ public class TreeTaskPanel extends Composite implements MouseOutHandler {
 			return (Task)selectedItem.getUserObject();
 		}else
 			return null;
+	}
+	
+	public TreeItem getSelectedItem(){
+		return treeTasks.getSelectedItem();
 	}
 	
 /******************************************************
@@ -157,6 +189,7 @@ public class TreeTaskPanel extends Composite implements MouseOutHandler {
 	
 	private void addTask(TreeItem parentItem, Task task){
 		TreeItem newItem = new TreeItem(task.name);
+		_tasks.put(task, newItem);
 		
 		if (parentItem != null){
 			parentItem.addItem(newItem);
@@ -187,4 +220,8 @@ public class TreeTaskPanel extends Composite implements MouseOutHandler {
 			t = (Task)selectedItem.getUserObject();//_tasks.get(selectedItem);
 		return t;
 	}
+
+
+
+	
 }

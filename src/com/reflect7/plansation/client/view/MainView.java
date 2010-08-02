@@ -8,6 +8,7 @@ import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -31,44 +32,21 @@ public class MainView extends Composite {
 
 	@UiField SplitLayoutPanel splitterPanel;
 	@UiField TreeTaskPanel treeTaskPanel;
-	@UiField ListTaskPanel listTaskPanel;
+	@UiField IterationPanel iterationPanel;
+
 
 	//@UiField ListBox listTasks;
 	
 	public MainView() {
 		initWidget(uiBinder.createAndBindUi(this));
-	}
-
-	@Override
-	public void onAttach(){
-		super.onAttach();
+		iterationPanel.setTreeTaskPanel(treeTaskPanel);
 		
-		/*//hack until GWT Team fixes Issue 4384/4417
-		Element splitterElement = splitterPanel.getElement();
-		NodeList<Node> nodes = splitterElement.getChildNodes();
-		//Window.alert(nodes.getLength() + "");
-		for (int x = 0; x < nodes.getLength(); ++x)
-			if (nodes.getItem(x) instanceof Element){
-				Element e = (Element)nodes.getItem(x);
-				String s = e.getFirstChildElement().getClassName();
-				//Window.alert(s);
-				if (s != null)
-					if (s.equals("gwt-SplitLayoutPanel-HDragger") || s.equals("gwt-SplitLayoutPanel-VDragger")){
-						e.getFirstChildElement().getStyle().clearBackgroundColor();
-					}
-						
-			}*/	
+		//this.addDomHandler(splitterPanel, ResizeEvent.getType());
+		
 	}
 	
-	@UiHandler("buttonAddTask")
-	void handleClick(ClickEvent e){
-		Task selectedTask = treeTaskPanel.getSelectedTask();
-		if (selectedTask == null)
-			Window.alert("You must select a task before you can add it.");
-		else {
-			listTaskPanel.addTask(treeTaskPanel.getSelectedTask());
-		}
+	@Override protected void onAttach(){
+		super.onAttach();
+		splitterPanel.forceLayout();
 	}
-	
-	
 }

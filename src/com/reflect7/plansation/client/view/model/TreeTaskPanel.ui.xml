@@ -8,17 +8,28 @@
 
 			margin: 5px;
 			width: 100%;
+			 border-radius: 6px;
+   			-moz-border-radius: 6px;
 		}
 	</ui:style>
 
-	<g:DockLayoutPanel unit='PX'>
-		<g:center>
-			<g:Tree ui:field="treeTasks"></g:Tree>
-		</g:center>
-		<g:south size="25">
-			<w:TextBox width="100%"   ui:field="textTask"  placeholder="Enter task..."></w:TextBox>
-		</g:south>
-	</g:DockLayoutPanel>
+	<g:LayoutPanel addStyleNames="{style.item}">
+		<g:layer>
+			<g:DockLayoutPanel unit='PX'>
+			<g:center>
+				<g:ScrollPanel>
+					<g:Tree ui:field="treeTasks"></g:Tree>
+				</g:ScrollPanel>
+			</g:center>
+			<g:south size="25">
+				<w:TextBox width="100%"   ui:field="textTask"  placeholder="Enter task..."></w:TextBox>
+			</g:south>
+		</g:DockLayoutPanel>
+		</g:layer>
+		
+		
+	</g:LayoutPanel>
+	
 
 	
 </ui:UiBinder> 

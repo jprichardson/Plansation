@@ -15,10 +15,6 @@
 			background-color: #EEE;
 		}
 		
-		.test {
-			background-color: red;	
-		}
-		
 		.main-view-panel {
 			background-color: white;
 			margin: 10px;
@@ -46,18 +42,7 @@
 				</g:west>
 				
 				<g:center >
-					<g:DockLayoutPanel unit="PX">
-						<g:north size="30">
-							<g:HorizontalPanel>
-								<g:Button ui:field="buttonStartIteration">Start Iteration</g:Button>
-								<g:Button ui:field="buttonEndIteration">End Iteration</g:Button>
-								<g:Button ui:field="buttonAddTask">Add Task</g:Button>
-							</g:HorizontalPanel>
-						</g:north>
-						<g:center>
-							<psv:ListTaskPanel ui:field="listTaskPanel"></psv:ListTaskPanel>
-						</g:center>
-					</g:DockLayoutPanel>
+					<psv:IterationPanel ui:field="iterationPanel"/>
 				</g:center>
 			</g:SplitLayoutPanel>
 		</g:center>
