@@ -17,7 +17,7 @@ import com.reflect7.plansation.shared.model.User;
 @SuppressWarnings("serial")
 public class TaskServiceImpl extends RemoteServiceServlet implements TaskService {
 
-	private static Boolean _objectifyInitialized = false;
+	private static boolean _objectifyInitialized = false;
 	private static Objectify _ofy = null;
 	
 	public List<Task> loadRootTasks() throws IllegalArgumentException {

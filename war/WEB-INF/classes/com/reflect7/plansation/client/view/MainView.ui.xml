@@ -39,6 +39,7 @@
 			<g:SplitLayoutPanel ui:field="splitterPanel" styleName="{style.main-view-panel}">
 				<g:west size='360' >
 					<psvm:TreeTaskPanel ui:field="treeTaskPanel"></psvm:TreeTaskPanel>
+					
 				</g:west>
 				
 				<g:center >

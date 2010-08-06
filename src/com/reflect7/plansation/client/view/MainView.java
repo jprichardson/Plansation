@@ -45,6 +45,9 @@ public class MainView extends Composite {
 		
 	}
 	
+	public IterationPanel getIterationPanel() { return iterationPanel; }
+	public TreeTaskPanel getTreeTaskPanel() { return treeTaskPanel; }
+	
 	@Override protected void onAttach(){
 		super.onAttach();
 		splitterPanel.forceLayout();

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.googlecode.objectify.Key;
-import com.reflect7.plansation.client.event.Action;
+import com.reflect7.commongwt.client.event.Action;
 import com.reflect7.plansation.client.remoteservice.TaskServiceClient;
 import com.reflect7.plansation.shared.model.Task;
 

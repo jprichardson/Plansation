@@ -17,6 +17,17 @@
     <url-pattern>/plansation/task</url-pattern>
   </servlet-mapping>
   
+    <!-- Iteration -->
+  <servlet>
+    <servlet-name>iterationServlet</servlet-name>
+    <servlet-class>com.reflect7.plansation.server.remoteservice.IterationServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>iterationServlet</servlet-name>
+    <url-pattern>/plansation/iteration</url-pattern>
+  </servlet-mapping>
+  
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>Plansation.html</welcome-file>

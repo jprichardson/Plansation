@@ -20,15 +20,16 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.TreeItem;
 
 import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.Tree;
-import com.google.gwt.user.client.ui.TreeItem;
+
 import com.google.gwt.user.client.ui.Widget;
+import com.reflect7.commongwt.client.event.Action;
 import com.reflect7.commongwt.client.ui.widget.TextBox;
 import com.reflect7.plansation.client.Plansation;
 import com.reflect7.plansation.client.data.TaskRepository;
-import com.reflect7.plansation.client.event.Action;
 import com.reflect7.plansation.client.remoteservice.TaskService;
 import com.reflect7.plansation.client.remoteservice.TaskServiceAsync;
 import com.reflect7.plansation.client.remoteservice.TaskServiceClient;
@@ -43,21 +44,20 @@ public class TreeTaskPanel extends Composite implements MouseOutHandler, Require
 	@UiField TextBox textTask;
 
 	HashMap<Task, TreeItem> _tasks = new HashMap<Task, TreeItem>();
-	TaskServiceClient taskServiceClient;
-	TaskRepository _taskRepo;
+	
 	
 	private static String TREEITEM_LOADING = "Loading...";
 	
 	public TreeTaskPanel() {
 		initWidget(uiBinder.createAndBindUi(this));
-		taskServiceClient = Plansation.getTaskServiceClient();
-		_taskRepo = Plansation.getTaskRepo();
-		
-		_taskRepo.loadRootTasks(new Action<List<Task>>(){
-			public void execute(List<Task> result){
-				addTasks(result);
-			}
-		});
+	}
+	
+/******************************************************
+ * UI METHODS
+ ******************************************************/
+	TaskRepository _taskRepo;
+	public void setTaskRepo(TaskRepository taskRepo){
+		_taskRepo = taskRepo;
 	}
 	
 	
@@ -100,9 +100,9 @@ public class TreeTaskPanel extends Composite implements MouseOutHandler, Require
 	void handleKeyPress(KeyPressEvent e){
 		byte b = (byte)e.getCharCode();
 		if (b == 8){//[DELETE] key pressed
-			TreeItem selectedItem = treeTasks.getSelectedItem();
+			TreeItem selectedItem =  treeTasks.getSelectedItem();
 			if (selectedItem != null){
-				TreeItem parentItem = selectedItem.getParentItem();
+				TreeItem parentItem =  selectedItem.getParentItem();
 				if (parentItem == null)
 					treeTasks.removeItem(selectedItem);
 				else
@@ -156,8 +156,13 @@ public class TreeTaskPanel extends Composite implements MouseOutHandler, Require
 		return false;
 	}
 	
+	public void addTasks(List<Task> tasks){
+		for (Task t : tasks)
+			addTask(null, t);
+	}
+	
 	public Task getSelectedTask(){
-		TreeItem selectedItem = treeTasks.getSelectedItem();
+		TreeItem selectedItem =  treeTasks.getSelectedItem();
 		if (selectedItem != null){
 			//return _tasks.get(selectedItem);
 			return (Task)selectedItem.getUserObject();
@@ -166,7 +171,7 @@ public class TreeTaskPanel extends Composite implements MouseOutHandler, Require
 	}
 	
 	public TreeItem getSelectedItem(){
-		return treeTasks.getSelectedItem();
+		return  treeTasks.getSelectedItem();
 	}
 	
 /******************************************************
@@ -180,10 +185,10 @@ public class TreeTaskPanel extends Composite implements MouseOutHandler, Require
 		else
 			child = _taskRepo.createTask(task);
 	
-		TreeItem selectedItem = treeTasks.getSelectedItem();
+		TreeItem selectedItem =  treeTasks.getSelectedItem();
 		this.addTask(selectedItem, child);
 		
-		if (selectedItem.getChildCount() == 1)
+		if (selectedItem != null && selectedItem.getChildCount() == 1)
 			selectedItem.setState(true);
 	}
 	
@@ -203,18 +208,13 @@ public class TreeTaskPanel extends Composite implements MouseOutHandler, Require
 			newItem.addItem(new TreeItem(TREEITEM_LOADING));
 	}
 	
-	private void addTasks(List<Task> tasks){
-		for (Task t : tasks)
-			addTask(null, t);
-	}
-	
 	private void addTasks(TreeItem parentItem, List<Task> tasks){
 		for (Task t : tasks)
 			this.addTask(parentItem, t);
 	}
 	
 	private Task getTaskOfSelectedItem(){
-		TreeItem selectedItem = treeTasks.getSelectedItem();
+		TreeItem selectedItem =  treeTasks.getSelectedItem();
 		Task t = null;
 		if (selectedItem != null)
 			t = (Task)selectedItem.getUserObject();//_tasks.get(selectedItem);

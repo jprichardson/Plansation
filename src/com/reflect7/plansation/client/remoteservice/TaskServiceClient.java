@@ -5,7 +5,7 @@ import java.util.List;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.googlecode.objectify.Key;
-import com.reflect7.plansation.client.event.Action;
+import com.reflect7.commongwt.client.event.Action;
 import com.reflect7.plansation.shared.model.Task;
 
 public class TaskServiceClient {
@@ -61,11 +61,11 @@ public class TaskServiceClient {
 		});
 	}
 	
-	public void saveTask(Task parent, final Task child){
+	public void saveTask(final Task parent, final Task child){		
 		this.saveTask(parent, child, null);
 	}
 	
-	public void saveTask(Task parent, final Task child, final Action<Task> successAction){
+	public void saveTask(final Task parent, final Task child, final Action<Task> successAction){
 		_service.saveTask(parent, child, new AsyncCallback<List<Key<Task>>>(){
 			public void onFailure(Throwable caught) {
 				Window.alert("Save Task Parent/Child - Failure");
@@ -79,6 +79,12 @@ public class TaskServiceClient {
 				child.root = rootKey;
 				child.id = childKey.getId();
 				child.parent = parentKey;
+				
+				child.setParent(parent);
+				if (parent.root == null)
+					child.setRoot(parent);
+				else
+					child.setRoot(parent.getRoot());
 				
 				if (successAction != null)
 					successAction.execute(child);

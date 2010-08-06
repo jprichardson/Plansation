@@ -9,6 +9,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.reflect7.plansation.client.view.model.TreeTaskPanel;
+import com.reflect7.plansation.shared.model.Iteration;
 import com.reflect7.plansation.shared.model.Task;
 
 public class IterationPanel extends Composite {
@@ -17,15 +18,21 @@ public class IterationPanel extends Composite {
 	interface IterationPanelUiBinder extends UiBinder<Widget, IterationPanel> {}
 	
 	@UiField ListTaskPanel listTaskPanel;
-	TreeTaskPanel treeTaskPanel;
+	
 
 	public IterationPanel() {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 	
-	public void setTreeTaskPanel(TreeTaskPanel ttp){
-		treeTaskPanel = ttp;
+	private Iteration _iter;
+	public void setIteration(Iteration iteration){
+		_iter = iteration;
 	}
+	
+	private TreeTaskPanel treeTaskPanel;
+		public void setTreeTaskPanel(TreeTaskPanel ttp){
+			treeTaskPanel = ttp;
+		}
 	
 	@UiHandler("buttonAddTask")
 	void handleClick(ClickEvent e){

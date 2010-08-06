@@ -24,12 +24,8 @@
 			<g:south size="25">
 				<w:TextBox width="100%"   ui:field="textTask"  placeholder="Enter task..."></w:TextBox>
 			</g:south>
-		</g:DockLayoutPanel>
+	 	</g:DockLayoutPanel>
 		</g:layer>
-		
-		
 	</g:LayoutPanel>
-	
-
 	
 </ui:UiBinder> 
