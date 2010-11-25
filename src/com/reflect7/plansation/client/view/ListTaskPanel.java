@@ -10,6 +10,7 @@ import java.util.Queue;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -26,6 +27,7 @@ import com.google.gwt.user.client.ui.TreeItem;
 
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.reflect7.commongwt.client.event.Action;
 import com.reflect7.commongwt.client.util.TreeItemUtil;
 import com.reflect7.plansation.shared.model.Task;
 
@@ -66,7 +68,7 @@ public class ListTaskPanel extends Composite {
 		Tree projectTree = createOrFetchTree(project);
 		//projectTree.addItem(treeItemTask);
 		//projectTree.addItem(cloneToCheckboxes(treeItemTask));
-		projectTree.addItem(TreeItemUtil.cloneTreeItemsWithCheckboxes(treeItemTask));
+		projectTree.addItem(cloneTreeItemsWithCheckboxes(treeItemTask));
 		treeItemTask.setVisible(false);
 	}
 	
@@ -88,28 +90,63 @@ public class ListTaskPanel extends Composite {
 		return projectTree;
 	}
 	
-	private TreeItem cloneToCheckboxes(TreeItem oldTi){
-		TreeItem newTi = createCheckboxItem(oldTi);
-		HashMap<TreeItem, TreeItem> oldNewPair = new HashMap<TreeItem, TreeItem>();
-		oldNewPair.put(oldTi, newTi);
+	private TreeItem cloneTreeItemsWithCheckboxes(TreeItem root){
+		final HashMap<TreeItem, TreeItem> oldNew = new HashMap<TreeItem, TreeItem>();
+		final HashSet<TreeItem> didAddHandler = new HashSet<TreeItem>();
 		
-		Queue<TreeItem> tis = new LinkedList<TreeItem>();
-		//tis.addAll(fetchTreeItemChildren(oldTi));
-		
-		TreeItem current = tis.poll();
-		while (!tis.isEmpty()){
-			while (current.getChildCount() > 0){
+		TreeItemUtil.traverseDfs(root, new Action<TreeItem>(){
+			public void execute(TreeItem current){
+				TreeItem newTi = new TreeItem(new CheckBox(current.getText()));
+				newTi.setUserObject(current.getUserObject());
+				oldNew.put(current, newTi);
 				
+				if (current.getParentItem() != null && oldNew.containsKey(current.getParentItem())){
+					TreeItem newParent = oldNew.get(current.getParentItem());
+					newParent.addItem(newTi);
+					
+					addCheckboxHandlerChild(newTi);
+					
+					if (!didAddHandler.contains(newParent)){
+						addCheckboxHandlerParent(newParent);
+						didAddHandler.add(newParent);
+					}
+				}
 			}
-		}
-		return newTi;
+		});
+		
+		return oldNew.get(root);
 	}
 	
-	private TreeItem createCheckboxItem(TreeItem old){
-		TreeItem ti = new TreeItem(new CheckBox(old.getText()));
-		ti.setUserObject(old.getUserObject());
-		return ti;
+	//if parent is checked, check all children
+	private void addCheckboxHandlerParent(final TreeItem root){
+		final CheckBox checkboxParent = (CheckBox)root.getWidget();
+
+		checkboxParent.addClickHandler(new ClickHandler(){
+			@Override public void onClick(ClickEvent event) {
+				List<TreeItem> children = TreeItemUtil.fetchChildren(root);
+				if (checkboxParent.getValue()){
+					for (TreeItem child : children){
+						CheckBox checkboxChild = (CheckBox)child.getWidget();
+						checkboxChild.setValue(true); //check child
+					}
+				}
+			}
+		});
 	}
 	
-	
+	//if child is unchecked, uncheck parent
+	private void addCheckboxHandlerChild(final TreeItem child){
+		final CheckBox checkboxChild = (CheckBox)child.getWidget();
+		
+		checkboxChild.addClickHandler(new ClickHandler(){
+			@Override public void onClick(ClickEvent event) {
+				if (child.getParentItem() != null){
+					if (!checkboxChild.getValue()){
+						CheckBox checkboxParent = (CheckBox)child.getParentItem().getWidget();
+						checkboxParent.setValue(false); //uncheck parent
+					}
+				}
+			}
+		});
+	}
 }

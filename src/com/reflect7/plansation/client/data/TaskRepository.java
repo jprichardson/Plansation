@@ -1,6 +1,8 @@
 package com.reflect7.plansation.client.data;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import com.googlecode.objectify.Key;
@@ -11,6 +13,7 @@ import com.reflect7.plansation.shared.model.Task;
 public class TaskRepository {
 	
 	private TaskServiceClient _tsc;
+	private HashSet<Task> _tasksToSave = new HashSet<Task>();
 	
 /***************************************************
  * CONSTRUCTORS
@@ -33,10 +36,17 @@ public class TaskRepository {
 	
 	public int size() { return this.getCount(); }
 	
+	public boolean areTasksWaitingToBeSaved(){ return _tasksToSave.size() > 0; }
+	
 /***************************************************
  * PUBLIC METHODS
  ***************************************************/
 		
+	public void batchSaveTask(Task task){
+		if (!_tasksToSave.contains(task))
+			_tasksToSave.add(task);
+	}
+	
 	public Task createTask(String name){
 		Task t = new Task();
 		t.name = name;
@@ -93,6 +103,10 @@ public class TaskRepository {
 /***************************************************
  * PRIVATE METHODS
  ***************************************************/
+	
+	private void persistBatch(){
+		
+	}
 	
 	private void persist(Task task){
 		_tsc.saveTask(task, new Action<Task>(){

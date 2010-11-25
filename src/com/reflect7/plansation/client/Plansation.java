@@ -4,6 +4,11 @@ import java.util.List;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.Window.ClosingEvent;
+import com.google.gwt.user.client.Window.ClosingHandler;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.reflect7.commongwt.client.event.Action;
 import com.reflect7.plansation.client.data.TaskRepository;
@@ -59,6 +64,13 @@ public class Plansation implements EntryPoint {
 				_mainView.getTreeTaskPanel().addTasks(tasks);
 			}
 		});
+		
+		Window.addWindowClosingHandler(new ClosingHandler(){
+			@Override public void onWindowClosing(ClosingEvent event) {
+				if (_taskRepo.areTasksWaitingToBeSaved())
+					event.setMessage("You still have data waiting to be saved. If you leave, you may lose this data. Continue?");
+			}
+		});
 	}
 	
 	//Not ideal, but until Google stabilizes their MVP framework, I'm stuck with using Singletons
@@ -66,3 +78,5 @@ public class Plansation implements EntryPoint {
 	//public static TaskServiceClient getTaskServiceClient() { return _taskServiceClient; }
 	//public static IterationServiceClient getIterationServiceClient() { return _iterationServiceClient; }
 }
+
+
